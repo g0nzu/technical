@@ -1,30 +1,45 @@
-<h1 class"mb-4">Page manager</h1>
+<h1 class="mb-4">Page manager</h1>
 
+<!-- Formulario para crear nuevas páginas -->
 <form id="form-new" class="card card-body mb-4">
-  <div class="mb3">
-      <label class="form-label">Ruta (Slug)</label>
-      <input id="new-slug" class="form-control" placeholder="ej: servicios" required>
+  <div class="mb-3">
+    <label class="form-label">Ruta (Slug)</label>
+    <input
+      id="new-slug"
+      class="form-control"
+      placeholder="ej: servicios"
+      required
+    />
   </div>
   <div class="mb-3">
     <label class="form-label">HTML</label>
-    <textarea id="new-html" class="form-control" rows="5" placeholder="<h1> Mi tittle </h1>" required></textarea>
+    <textarea
+      id="new-html"
+      class="form-control"
+      rows="5"
+      placeholder="<h1> Mi título </h1>"
+      required
+    ></textarea>
   </div>
-  <button id="btn-create" class="btn btn-primary">Create page</button>
+  <div class="text-end">
+    <button id="btn-create" class="btn btn-primary">Create page</button>
+  </div>
 </form>
 
+<!-- Tabla de páginas existentes -->
 <div class="card mb-4">
   <div class="card-body">
     <h2 class="h5 mb-3">Existing pages</h2>
-    <div class="table table-sm align-middle">
+    <table class="table table-sm align-middle">
       <thead>
-       <tr>
+        <tr>
           <th>Ruta</th>
           <th>Archivos</th>
           <th class="text-end">Acciones</th>
         </tr>
       </thead>
       <tbody id="table-webs"></tbody>
-    </div>
+    </table>
   </div>
 </div>
 
@@ -33,18 +48,32 @@
     <form id="form-edit" class="card card-body">
       <div class="mb-2">
         <label class="form-label">Editing</label>
-        <input id="edit-slug" class="form-control" readonly placeholder="Select on your table"> 
+        <input
+          id="edit-slug"
+          class="form-control"
+          readonly
+          placeholder="Select on your table"
+        />
       </div>
       <div class="mb-3">
         <label class="form-label">HTML</label>
-       <textarea id="eddit-html" class="btn btn-sucess" disabled> Save changes </textarea>
-    </form>
-    </div>
-    <div class="col-md-6">
-      <div class="card card-body">
-        <h3 class="H6"Preview></h3>
-        <div id="preview" class="border p-3" style="min-height:200px;"></div>
+        <textarea
+          id="edit-html"
+          class="form-control"
+          rows="5"
+          placeholder="Edit your HTML"
+        ></textarea>
       </div>
+      <div class="text-end">
+        <button id="btn-save" class="btn btn-success">Save changes</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="h6 mb-3">Preview</h3>
+      <div id="preview" class="border p-3" style="min-height:200px;"></div>
     </div>
   </div>
 </div>
