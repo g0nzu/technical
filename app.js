@@ -8,7 +8,7 @@ const apiRouter = require("./routes/api.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//MIDDLEWARES
+// MIDDLEWARES
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,9 +19,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
-myweb.initIfNotexists();
+(async () => {
+  await myweb.initIfNotExists();
+})();
 
-//Home render
+// Home render
 app.get("/", async (req, res, next) => {
   try {
     const content = await myweb.readContent("main");
@@ -31,15 +33,15 @@ app.get("/", async (req, res, next) => {
   }
 });
 
-//Rest API
+// Rest API
 app.use("/api", apiRouter);
 
-//Admin panel
+// Admin panel
 app.get("/admin", (req, res) => {
   return res.render("admin", { layout: "layouts/admin" });
 });
 
-//Dynamic routes
+// Dynamic routes
 app.get("/:route", async (req, res, next) => {
   try {
     const { route } = req.params;
@@ -54,10 +56,10 @@ app.get("/:route", async (req, res, next) => {
   }
 });
 
-//404
+// 404
 app.use((req, res) => res.status(404).send("404!"));
 
-//Start server
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:3000`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

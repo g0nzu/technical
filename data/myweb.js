@@ -1,8 +1,9 @@
 const fs = require("fs-extra");
 const path = require("path");
+
 // JSON REGISTRY LIVES NEXT TO THIS FILE
 const DB_PATH = path.join(__dirname, "webs.json");
-// HTML FILES LIVES IN ProjectRoot(web (one level above this file)
+// HTML FILES LIVE IN ProjectRoot/web (one level above this file)
 const WEB_DIR = path.join(__dirname, "..", "web");
 
 const RESERVED = new Set(["admin", "root", "system", "null", "undefined"]);
@@ -22,7 +23,7 @@ async function saveDb(db) {
 }
 
 const myweb = {
-  async initIfNotexists() {
+  async initIfNotExists() {
     await fs.ensureDir(path.dirname(DB_PATH));
     await fs.ensureDir(WEB_DIR);
 
@@ -31,17 +32,23 @@ const myweb = {
     if (!db.webs.some((w) => w.route === "main")) {
       const mainAbs = path.join(WEB_DIR, "main.html");
       const content = `<!DOCTYPE html>
-      <h1>Welcome to this CMS!</h1>
-      <p> This is the <strong>main</strong> page.
-      <p> Edit it from <code>/admin</code>.`;
+<h1>Welcome to this CMS!</h1>
+<p>This is the <strong>main</strong> page.</p>
+<p>Edit it from <code>/admin</code>.</p>`;
       await fs.outputFile(mainAbs, content, "utf-8");
+
+      db.webs.push({
+        route: "main",
+        title: "Main Page",
+        file: path
+          .relative(path.join(__dirname, ".."), mainAbs)
+          .replace(/\\/g, "/"),
+      });
+
+      await saveDb(db);
     }
-    db.webs.push({
-      route: "main",
-      title: "Main Page",
-      filename: "web/main.html",
-    });
   },
+
   async list() {
     const db = await loadDb();
     return db.webs;
@@ -51,7 +58,7 @@ const myweb = {
     const db = await loadDb();
     const page = db.webs.find((w) => w.route === route);
     if (!page) return null;
-    const absPath = path.join(__dirname, "..", page.filename);
+    const absPath = path.join(__dirname, "..", page.file);
     const exists = await fs.pathExists(absPath);
     if (!exists) return "";
     return fs.readFile(absPath, "utf-8");
@@ -93,9 +100,10 @@ const myweb = {
 
   async delete(slug) {
     if (!slug) throw new Error("Route required");
-    if (slug == "main") throw new Error("Cannot delete main page");
+    if (slug === "main") throw new Error("Cannot delete main page");
+
     const db = await loadDb();
-    const idx = db.wes.findIndex((w) => w.route === slug);
+    const idx = db.webs.findIndex((w) => w.route === slug);
     if (idx === -1) throw new Error("Route not found");
 
     const abs = path.join(__dirname, "..", db.webs[idx].file);
